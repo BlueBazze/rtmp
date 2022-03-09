@@ -1,0 +1,12 @@
+com/reactnativertmppublisher/RTMPManager.java
+ com.reactnativertmppublisher.RTMPManager
+ com.reactnativertmppublisher.RTMPManager$1
+com/reactnativertmppublisher/RTMPModule.java
+ com.reactnativertmppublisher.RTMPModule
+com/reactnativertmppublisher/modules/Publisher.java
+ com.reactnativertmppublisher.modules.Publisher
+ com.reactnativertmppublisher.modules.Publisher$1
+com/reactnativertmppublisher/modules/ConnectionChecker.java
+ com.reactnativertmppublisher.modules.ConnectionChecker
+com/reactnativertmppublisher/interfaces/ConnectionListener.java
+ com.reactnativertmppublisher.interfaces.ConnectionListener
