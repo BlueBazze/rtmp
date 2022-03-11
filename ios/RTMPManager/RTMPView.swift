@@ -31,6 +31,12 @@ class RTMPView: UIViewController {
       RTMPCreator.setStreamName(name: streamName as String)
     }
   }
+    
+    @objc var IsLandscape: Bool = false {
+        didSet {
+            RTMPCreator.IsLandscape = IsLandscape
+      }
+    }
   
   override init(frame: CGRect) {
     super.init(frame: frame)
