@@ -82,9 +82,19 @@ class RTMPView: UIView {
 
         RTMPCreator.connection.addEventListener(.rtmpStatus, selector: #selector(statusHandler), observer: self)
     
-        hkView.attachStream(RTMPCreator.stream)
+        
       
-        self.addSubview(hkView)
+      hkView.isUserInteractionEnabled = true
+      hkView.autoresizingMask = [UIView.AutoresizingMask.flexibleHeight,
+                                 UIView.AutoresizingMask.flexibleWidth]
+      
+      hkView.frame = self.bounds
+      hkView.videoGravity = AVLayerVideoGravity.resizeAspectFill
+      
+      hkView.attachStream(RTMPCreator.stream)
+    
+      self.addSubview(hkView)
+      
     }
     
     required init?(coder aDecoder: NSCoder) {
