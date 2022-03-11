@@ -10,6 +10,7 @@ import HaishinKit
 import AVFoundation
 
 class RTMPView: UIView {
+    //TODO set video resolution from react native
   private var hkView: MTHKView!
   @objc var onDisconnect: RCTDirectEventBlock?
   @objc var onConnectionFailed: RCTDirectEventBlock?
@@ -29,6 +30,12 @@ class RTMPView: UIView {
       RTMPCreator.setStreamName(name: streamName as String)
     }
   }
+    
+    @objc var IsLandscape: Bool = false {
+        didSet {
+            RTMPCreator.IsLandscape = IsLandscape
+      }
+    }
   
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -52,7 +59,7 @@ class RTMPView: UIView {
         RTMPCreator.connection.addEventListener(.rtmpStatus, selector: #selector(statusHandler), observer: self)
     
         hkView.attachStream(RTMPCreator.stream)
-        
+      
         self.addSubview(hkView)
     }
     
@@ -108,38 +115,4 @@ class RTMPView: UIView {
        }
     }
 
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-          super.viewWillTransition(to: size, with: coordinator)
-    if UIDevice.current.orientation.isLandscape {
-              print("Landscape")
-            //rtmpConnection.removeEventListener(.rtmpStatus, selector: #selector(rtmpStatusHandler), observer: self)
-            //rtmpStream.close()
-            rtmpStream.orientation = AVCaptureVideoOrientation.landscapeRight
-            rtmpStream.videoSettings = [
-              
-              .width:  1280,
-              .height: 720,
-              .bitrate: 7000 * 1024,
-              .profileLevel: kVTProfileLevel_H264_Baseline_3_1,
-              .maxKeyFrameIntervalDuration: 2,
-            ]
-            //rtmpConnection.addEventListener(.rtmpStatus, selector: #selector(rtmpStatusHandler), observer: self)
-            //rtmpStream.publish(BroadcastURL.replacingOccurrences(of: "rtmp://rtmp.seetv.dk/show/", with: ""))
-          } else {
-              print("Portrait")
-            //rtmpConnection.removeEventListener(.rtmpStatus, selector: #selector(rtmpStatusHandler), observer: self)
-            //rtmpStream.close()
-            rtmpStream.orientation = AVCaptureVideoOrientation.portrait
-            rtmpStream.videoSettings = [
-              
-              .width:  720,
-              .height: 1280 ,
-              .bitrate: 7000 * 1024,
-              .profileLevel: kVTProfileLevel_H264_Baseline_3_1,
-              .maxKeyFrameIntervalDuration: 2,
-            ]
-            //rtmpConnection.addEventListener(.rtmpStatus, selector: #selector(rtmpStatusHandler), observer: self)
-            //rtmpStream.publish(BroadcastURL.replacingOccurrences(of: "rtmp://rtmp.seetv.dk/show/", with: ""))
-          }
-      }
 }

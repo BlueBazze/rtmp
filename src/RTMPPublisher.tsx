@@ -16,6 +16,10 @@ export interface RTMPPublisherProps {
   streamURL: string;
   streamName: string;
   /**
+   * Determines if preview is displayed as landscape
+   */
+  IsLandscape: boolean;
+  /**
    * Callback for connection fails on RTMP server
    */
   onConnectionFailed?: (data: string) => void;
