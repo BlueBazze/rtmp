@@ -73,8 +73,8 @@ class RTMPView: UIView {
         ]
     
         RTMPCreator.stream.videoSettings = [
-            .width: 720,
-            .height: 1280
+            .width: 1080,
+            .height: 1920
         ]
         
         RTMPCreator.stream.attachAudio(AVCaptureDevice.default(for: .audio))
