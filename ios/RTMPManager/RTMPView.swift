@@ -31,10 +31,34 @@ class RTMPView: UIView {
     }
   }
     
-    @objc var IsLandscape: Bool = false {
+    
+    @objc static var IsLandscape: Bool = false {
         didSet {
-            RTMPCreator.IsLandscape = IsLandscape
-      }
+            switch (UIDevice.current.orientation) {
+                case .portrait:
+                RTMPCreator.stream.orientation = AVCaptureVideoOrientation.portrait
+                    break
+                case .portraitUpsideDown:
+                RTMPCreator.stream.orientation = AVCaptureVideoOrientation.portraitUpsideDown
+                    break
+                case .landscapeLeft:
+                RTMPCreator.stream.orientation = AVCaptureVideoOrientation.landscapeRight
+                    break
+                    
+                case .landscapeRight:
+                RTMPCreator.stream.orientation = AVCaptureVideoOrientation.landscapeLeft
+                    break
+                case .faceUp:
+                    break
+                case .faceDown:
+                    break
+                case .unknown:
+                    break
+                @unknown default:
+                    break
+            }
+            RTMPCreator.setVideoSettings(isLandscape: IsLandscape)
+        }
     }
   
   override init(frame: CGRect) {

@@ -17,34 +17,7 @@ class RTMPCreator {
   private static var _streamName: String = ""
   public static var isStreaming: Bool = false
     
-    public static var IsLandscape: Bool = false {
-        didSet {
-            switch (UIDevice.current.orientation) {
-                case .portrait:
-                stream.orientation = AVCaptureVideoOrientation.portrait
-                    break
-                case .portraitUpsideDown:
-                stream.orientation = AVCaptureVideoOrientation.portraitUpsideDown
-                    break
-                case .landscapeLeft:
-                stream.orientation = AVCaptureVideoOrientation.landscapeRight
-                    break
-                    
-                case .landscapeRight:
-                stream.orientation = AVCaptureVideoOrientation.landscapeLeft
-                    break
-                case .faceUp:
-                    break
-                case .faceDown:
-                    break
-                case .unknown:
-                    break
-                @unknown default:
-                    break
-            }
-            setVideoSettings()
-        }
-    }
+   
   
   public static func setStreamUrl(url: String){
     _streamUrl = url
@@ -80,12 +53,12 @@ class RTMPCreator {
     isStreaming = false
   }
     
-    public static func setVideoSettings(width: Int = 1080, height: Int = 1920) {
+    public static func setVideoSettings(width: Int = 1080, height: Int = 1920, isLandscape: Bool = false) {
         
             stream.videoSettings = [
                 
-                .width: self.IsLandscape ? height : width,
-                .height: self.IsLandscape ? width : height,
+                .width: isLandscape ? height : width,
+                .height: isLandscape ? width : height,
                 .bitrate: 7000 * 1024,
                 .profileLevel: kVTProfileLevel_H264_Baseline_AutoLevel, //kVTProfileLevel_H264_Baseline_3_1,
                 .maxKeyFrameIntervalDuration: 2,
