@@ -8,7 +8,6 @@
 import UIKit
 import HaishinKit
 import AVFoundation
-import VideoToolbox
 
 class RTMPView: UIView {
     //TODO set video resolution from react native
@@ -60,7 +59,7 @@ class RTMPView: UIView {
         RTMPCreator.connection.addEventListener(.rtmpStatus, selector: #selector(statusHandler), observer: self)
     
         hkView.attachStream(RTMPCreator.stream)
-        
+      
         self.addSubview(hkView)
     }
     
@@ -116,27 +115,4 @@ class RTMPView: UIView {
        }
     }
 
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-          super.viewWillTransition(to: size, with: coordinator)
-    if UIDevice.current.orientation.isLandscape {
-        RTMPCreator.stream.orientation = AVCaptureVideoOrientation.landscapeRight
-        RTMPCreator.stream.videoSettings = [
-              .width:  1280,
-              .height: 720,
-              .bitrate: 7000 * 1024,
-              .profileLevel: kVTProfileLevel_H264_Baseline_3_1,
-              .maxKeyFrameIntervalDuration: 2,
-            ]
-          } else {
-              RTMPCreator.stream.orientation = AVCaptureVideoOrientation.portrait
-              RTMPCreator.stream.videoSettings = [
-              
-              .width:  720,
-              .height: 1280 ,
-              .bitrate: 7000 * 1024,
-              .profileLevel: kVTProfileLevel_H264_Baseline_3_1,
-              .maxKeyFrameIntervalDuration: 2,
-            ]
-          }
-      }
 }
