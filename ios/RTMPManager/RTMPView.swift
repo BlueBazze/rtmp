@@ -32,7 +32,7 @@ class RTMPView: UIView {
   }
     
     
-    @objc static var IsLandscape: Bool = false {
+    @objc var IsLandscape: Bool = false {
         didSet {
             switch (UIDevice.current.orientation) {
                 case .portrait:
