@@ -10,7 +10,7 @@ import HaishinKit
 import AVFoundation
 import VideoToolbox
 
-class RTMPView: UIViewController {
+class RTMPView: UIView {
     //TODO set video resolution from react native
   private var hkView: MTHKView!
   @objc var onDisconnect: RCTDirectEventBlock?
