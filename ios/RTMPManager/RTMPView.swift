@@ -66,7 +66,7 @@ class RTMPView: UIView {
 
         hkView = MTHKView(frame: UIScreen.main.bounds)
         RTMPCreator.stream.captureSettings = [
-            .fps: 60,
+            .fps: 30,
             .sessionPreset: AVCaptureSession.Preset.high,
             .continuousAutofocus: true,
             .continuousExposure: true
