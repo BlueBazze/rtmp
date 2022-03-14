@@ -67,6 +67,9 @@ public class RTMPManager extends SimpleViewManager<OpenGlView> {
   public void setStreamName(OpenGlView openGlView, @Nullable String name) {
     publisher.setStreamName(name);
   }
+  @ReactProp(name = "IsLandscape")
+  public void setIsLandscape(OpenGlView openGlView, @Nullable Boolean bool) {
+  }
 
   @Nullable
   @Override
