@@ -31,10 +31,34 @@ class RTMPView: UIView {
     }
   }
     
+    
     @objc var IsLandscape: Bool = false {
         didSet {
-            RTMPCreator.IsLandscape = IsLandscape
-      }
+            switch (UIDevice.current.orientation) {
+                case .portrait:
+                RTMPCreator.stream.orientation = AVCaptureVideoOrientation.portrait
+                    break
+                case .portraitUpsideDown:
+                RTMPCreator.stream.orientation = AVCaptureVideoOrientation.portraitUpsideDown
+                    break
+                case .landscapeLeft:
+                RTMPCreator.stream.orientation = AVCaptureVideoOrientation.landscapeRight
+                    break
+                    
+                case .landscapeRight:
+                RTMPCreator.stream.orientation = AVCaptureVideoOrientation.landscapeLeft
+                    break
+                case .faceUp:
+                    break
+                case .faceDown:
+                    break
+                case .unknown:
+                    break
+                @unknown default:
+                    break
+            }
+            RTMPCreator.setVideoSettings(isLandscape: IsLandscape)
+        }
     }
   
   override init(frame: CGRect) {
@@ -42,15 +66,15 @@ class RTMPView: UIView {
 
         hkView = MTHKView(frame: UIScreen.main.bounds)
         RTMPCreator.stream.captureSettings = [
-            .fps: 60,
+            .fps: 30,
             .sessionPreset: AVCaptureSession.Preset.high,
             .continuousAutofocus: true,
             .continuousExposure: true
         ]
     
         RTMPCreator.stream.videoSettings = [
-            .width: 720,
-            .height: 1280
+            .width: 1080,
+            .height: 1920
         ]
         
         RTMPCreator.stream.attachAudio(AVCaptureDevice.default(for: .audio))
@@ -58,9 +82,19 @@ class RTMPView: UIView {
 
         RTMPCreator.connection.addEventListener(.rtmpStatus, selector: #selector(statusHandler), observer: self)
     
-        hkView.attachStream(RTMPCreator.stream)
+        
       
-        self.addSubview(hkView)
+      hkView.isUserInteractionEnabled = true
+      hkView.autoresizingMask = [UIView.AutoresizingMask.flexibleHeight,
+                                 UIView.AutoresizingMask.flexibleWidth]
+      
+      hkView.frame = self.bounds
+      hkView.videoGravity = AVLayerVideoGravity.resizeAspectFill
+      
+      hkView.attachStream(RTMPCreator.stream)
+    
+      self.addSubview(hkView)
+      
     }
     
     required init?(coder aDecoder: NSCoder) {
