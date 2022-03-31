@@ -140,7 +140,7 @@ public class Publisher {
   }
 
   public boolean isVideoPrepared() {
-    return _rtmpCamera.prepareVideo(1920, 1080, 10000 * 1024));
+    return _rtmpCamera.prepareVideo(1920, 1080, 10000 * 1024);
   }
 
   public boolean hasCongestion() {
