@@ -163,6 +163,8 @@ public class Publisher {
     _rtmpCamera.switchCamera();
   }
 
+  public void setZoomScale(Float _scale) { _rtmpCamera.setZoom(_scale); }
+
   public void toggleFlash() {
     try {
       if(_rtmpCamera.isLanternEnabled()){
@@ -183,7 +185,7 @@ public class Publisher {
     // }
     if(!_rtmpCamera.isStreaming() && getPublishURL().startsWith("rtmp://"))
     {
-      if(_rtmpCamera.prepareAudio() && _rtmpCamera.prepareVideo(1920, 1080, 10000 * 1024)) {
+      if(isAudioPrepared() && isVideoPrepared()) {
         _rtmpCamera.startStream(getPublishURL());
         // try {
         //   _rtmpCamera.startStreamAndRecord(getPublishURL(), folder.getAbsolutePath() + "/reee.mp4");
@@ -236,8 +238,6 @@ public class Publisher {
   }
   //endregion
 
-  public void setZoomScale(Float _scale) {
-    _rtmpCamera.setZoom(_scale);
-  }
+
 
 }

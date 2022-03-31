@@ -18,6 +18,27 @@ class RTMPView: UIView {
   @objc var onConnectionSuccess: RCTDirectEventBlock?
   @objc var onNewBitrateReceived: RCTDirectEventBlock?
   @objc var onStreamStateChanged: RCTDirectEventBlock?
+
+  private var currentZoomFactor: CGFloat = 1.0
+  private var lastScale: CGFloat = 0.0
+
+  @objc var zoom: NSString! {
+    didSet {
+        NSLog("Did set zoom")
+        self.rtmpStream.setZoomFactor(CGFloat((self.zoom as NSString).doubleValue))
+    }
+  }
+
+  @objc
+    private func zoom(sender: UIPinchGestureRecognizer) {
+        if sender.state == .began || sender.state == .changed {
+          if(sender.scale < 2 && sender.scale > 0) {
+              currentZoomFactor = min(max(currentZoomFactor + (min(max(sender.scale, 0.5), 1.5) - 1) * 2.2, 0), 4)
+              rtmpStream.setZoomFactor(currentZoomFactor, ramping: false)
+              sender.scale = 1
+          }
+        }
+    }
   
   @objc var streamURL: NSString = "" {
     didSet {
