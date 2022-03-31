@@ -71,6 +71,11 @@ public class RTMPManager extends SimpleViewManager<OpenGlView> {
   public void setIsLandscape(OpenGlView openGlView, @Nullable Boolean bool) {
   }
 
+  @ReactProp(name = "zoom")
+  public void setZoom(OpenGlView openGlView, String scale) {
+    publisher.setZoomScale(Float.parseFloat(scale));
+  }
+
   @Nullable
   @Override
   public Map<String, Object> getExportedCustomDirectEventTypeConstants() {

@@ -1,5 +1,18 @@
 import React, { forwardRef, useImperativeHandle } from 'react';
-import { NativeModules, ViewStyle } from 'react-native';
+import {
+  Animated,
+  LayoutRectangle,
+  NativeModules,
+  StyleSheet,
+  ViewStyle,
+} from 'react-native';
+import {
+  GestureHandlerRootView,
+  HandlerStateChangeEvent,
+  PinchGestureHandler,
+  PinchGestureHandlerEventPayload,
+  State,
+} from 'react-native-gesture-handler';
 import PublisherComponent, {
   DisconnectType,
   ConnectionFailedType,
@@ -7,6 +20,7 @@ import PublisherComponent, {
   ConnectionSuccessType,
   NewBitrateReceivedType,
   StreamStateChangedType,
+  NativeRTMPPublisherProps,
 } from './Component';
 import type { RTMPPublisherRefProps, StreamState } from './types';
 
@@ -59,6 +73,8 @@ const RTMPPublisher = forwardRef<RTMPPublisherRefProps, RTMPPublisherProps>(
     },
     ref
   ) => {
+    const _root = React.useRef<NativeRTMPPublisherProps>(null);
+
     const startStream = async () => await RTMPModule.startStream();
 
     const stopStream = async () => await RTMPModule.stopStream();
@@ -125,18 +141,69 @@ const RTMPPublisher = forwardRef<RTMPPublisherRefProps, RTMPPublisherProps>(
       toggleFlash,
     }));
 
+    const _baseScale = new Animated.Value(1);
+    const _pinchScale = new Animated.Value(1);
+    var _lastScale = 1;
+
+    const _onPinchHandlerStateChange = (
+      event: HandlerStateChangeEvent<PinchGestureHandlerEventPayload>
+    ) => {
+      // console.log({ _lastScale });
+      if (
+        event.nativeEvent.oldState === State.ACTIVE &&
+        event.nativeEvent.numberOfPointers === 2
+      ) {
+        _lastScale *= event.nativeEvent.scale;
+        _lastScale < 1 && (_lastScale = 1);
+        _lastScale > 3 && (_lastScale = 3);
+        _baseScale.setValue(_lastScale);
+        _pinchScale.setValue(1);
+      }
+    };
+
+    const [viewDimension, setViewDimension] = React.useState<LayoutRectangle>({
+      width: 0,
+      height: 0,
+      x: 0,
+      y: 0,
+    });
+
     return (
-      <PublisherComponent
-        {...props}
-        onDisconnect={handleOnDisconnect}
-        onConnectionFailed={handleOnConnectionFailed}
-        onConnectionStarted={handleOnConnectionStarted}
-        onConnectionSuccess={handleOnConnectionSuccess}
-        onNewBitrateReceived={handleOnNewBitrateReceived}
-        onStreamStateChanged={handleOnStreamStateChanged}
-      />
+      <GestureHandlerRootView
+        style={[styles.flex, props.style]}
+        onLayout={(event) => {
+          setViewDimension(event.nativeEvent.layout);
+        }}
+      >
+        <PinchGestureHandler
+          onGestureEvent={(event) => {
+            _root.current?.setNativeProps({
+              zoom: `${_lastScale * event.nativeEvent.scale}`,
+            });
+          }}
+          onHandlerStateChange={_onPinchHandlerStateChange}
+        >
+          <Animated.View style={[styles.flex]} collapsable={false}>
+            <PublisherComponent
+              ref={_root as any}
+              {...props}
+              onDisconnect={handleOnDisconnect}
+              onConnectionFailed={handleOnConnectionFailed}
+              onConnectionStarted={handleOnConnectionStarted}
+              onConnectionSuccess={handleOnConnectionSuccess}
+              onNewBitrateReceived={handleOnNewBitrateReceived}
+              onStreamStateChanged={handleOnStreamStateChanged}
+            />
+          </Animated.View>
+        </PinchGestureHandler>
+      </GestureHandlerRootView>
     );
   }
 );
+
+const styles = StyleSheet.create({
+  absolute: { position: 'absolute' },
+  flex: { flex: 1 },
+});
 
 export default RTMPPublisher;

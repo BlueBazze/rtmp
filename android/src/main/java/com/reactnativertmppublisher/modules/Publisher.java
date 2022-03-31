@@ -236,4 +236,8 @@ public class Publisher {
   }
   //endregion
 
+  public void setZoomScale(Float _scale) {
+    _rtmpCamera.setZoom(_scale);
+  }
+
 }
