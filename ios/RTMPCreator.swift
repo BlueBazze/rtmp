@@ -38,6 +38,14 @@ class RTMPCreator {
      */
     return "\(_streamUrl)/\(_streamName)"
   }
+    
+    private var currentZoomFactor: CGFloat = 1.0
+    private var lastScale: CGFloat = 0.0
+
+    
+    public static func setZoom(scale: CGFloat) {
+        stream.setZoomFactor(scale)
+    }
   
   public static func startPublish(){
     connection.requireNetworkFramework = true

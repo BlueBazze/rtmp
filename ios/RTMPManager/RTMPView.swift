@@ -24,12 +24,11 @@ class RTMPView: UIView {
 
   @objc var zoom: NSString! {
     didSet {
-        NSLog("Did set zoom")
-        self.rtmpStream.setZoomFactor(CGFloat((self.zoom as NSString).doubleValue))
+        RTMPCreator.setZoom(scale: CGFloat((self.zoom as NSString).doubleValue))
     }
   }
 
-  @objc
+  /*@objc
     private func zoom(sender: UIPinchGestureRecognizer) {
         if sender.state == .began || sender.state == .changed {
           if(sender.scale < 2 && sender.scale > 0) {
@@ -38,7 +37,7 @@ class RTMPView: UIView {
               sender.scale = 1
           }
         }
-    }
+    }*/
   
   @objc var streamURL: NSString = "" {
     didSet {
