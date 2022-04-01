@@ -26,8 +26,9 @@ export interface NativeRTMPPublisherProps {
   onDisconnect?: (e: DisconnectType) => void;
   onNewBitrateReceived?: (e: NewBitrateReceivedType) => void;
   onStreamStateChanged?: (e: StreamStateChangedType) => void;
-
-  setNativeProps?(nativeProps: Object): void;
+}
+export interface RefNativeRTMPPublisherProps extends NativeRTMPPublisherProps {
+  setNativeProps(nativeProps: Object): void;
 }
 export default requireNativeComponent<NativeRTMPPublisherProps>(
   'RTMPPublisher'

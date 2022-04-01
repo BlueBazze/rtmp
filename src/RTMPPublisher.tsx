@@ -1,28 +1,31 @@
 import React, { forwardRef, useImperativeHandle } from 'react';
 import {
   Animated,
-  LayoutRectangle,
   NativeModules,
   StyleSheet,
+  View,
   ViewStyle,
 } from 'react-native';
 import {
-  GestureHandlerRootView,
+  Gesture,
+  GestureDetector,
   HandlerStateChangeEvent,
   PinchGestureHandler,
   PinchGestureHandlerEventPayload,
   State,
+  GestureHandlerRootView,
 } from 'react-native-gesture-handler';
-import PublisherComponent, {
-  DisconnectType,
+import RTMPView, {
   ConnectionFailedType,
   ConnectionStartedType,
   ConnectionSuccessType,
+  DisconnectType,
   NewBitrateReceivedType,
+  RefNativeRTMPPublisherProps,
   StreamStateChangedType,
-  NativeRTMPPublisherProps,
 } from './Component';
 import type { RTMPPublisherRefProps, StreamState } from './types';
+import { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
 const RTMPModule = NativeModules.RTMPPublisher;
 export interface RTMPPublisherProps {
@@ -73,7 +76,7 @@ const RTMPPublisher = forwardRef<RTMPPublisherRefProps, RTMPPublisherProps>(
     },
     ref
   ) => {
-    const _root = React.useRef<NativeRTMPPublisherProps>(null);
+    const _root = React.useRef<RefNativeRTMPPublisherProps>(null);
 
     const startStream = async () => await RTMPModule.startStream();
 
@@ -148,7 +151,8 @@ const RTMPPublisher = forwardRef<RTMPPublisherRefProps, RTMPPublisherProps>(
     const _onPinchHandlerStateChange = (
       event: HandlerStateChangeEvent<PinchGestureHandlerEventPayload>
     ) => {
-      // console.log({ _lastScale });
+      console.log('RE');
+      console.log({ _lastScale });
       if (
         event.nativeEvent.oldState === State.ACTIVE &&
         event.nativeEvent.numberOfPointers === 2
@@ -161,45 +165,79 @@ const RTMPPublisher = forwardRef<RTMPPublisherRefProps, RTMPPublisherProps>(
       }
     };
 
-    const [viewDimension, setViewDimension] = React.useState<LayoutRectangle>({
-      width: 0,
-      height: 0,
-      x: 0,
-      y: 0,
-    });
+    // const [viewDimension, setViewDimension] = React.useState<LayoutRectangle>({
+    //   width: 0,
+    //   height: 0,
+    //   x: 0,
+    //   y: 0,
+    // });
+
+    const scale = useSharedValue(1);
+    const savedScale = useSharedValue(1);
+
+    React.useEffect(() => {
+      console.log({ scale: scale.value, savedScale: savedScale.value });
+    }, [scale.value, savedScale.value]);
+
+    const pinchGesture = Gesture.Pinch()
+      .onUpdate((e) => {
+        scale.value = savedScale.value * e.scale;
+      })
+      .onEnd(() => {
+        savedScale.value = scale.value;
+        // _root.current?.setNativeProps({
+        //   zoom: `${scale.value}`,
+        // });
+      });
+
+    // const animatedStyle = useAnimatedStyle(() => ({
+    //   transform: [{ scale: scale.value }],
+    // }));
 
     return (
-      <GestureHandlerRootView
-        style={[styles.flex, props.style]}
-        onLayout={(event) => {
-          setViewDimension(event.nativeEvent.layout);
-        }}
-      >
-        <PinchGestureHandler
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <View style={[styles.flex, props.style]}>
+          {/* <PinchGestureHandler
           onGestureEvent={(event) => {
+            console.log({ event });
             _root.current?.setNativeProps({
               zoom: `${_lastScale * event.nativeEvent.scale}`,
             });
           }}
           onHandlerStateChange={_onPinchHandlerStateChange}
-        >
-          <Animated.View style={[styles.flex]} collapsable={false}>
-            <PublisherComponent
-              ref={_root as any}
-              {...props}
-              onDisconnect={handleOnDisconnect}
-              onConnectionFailed={handleOnConnectionFailed}
-              onConnectionStarted={handleOnConnectionStarted}
-              onConnectionSuccess={handleOnConnectionSuccess}
-              onNewBitrateReceived={handleOnNewBitrateReceived}
-              onStreamStateChanged={handleOnStreamStateChanged}
-            />
-          </Animated.View>
-        </PinchGestureHandler>
+        > */}
+          <GestureDetector gesture={pinchGesture}>
+            <Animated.View
+              style={[styles.flex, { backgroundColor: 'red' }]}
+              collapsable={false}
+            >
+              <RTMPView
+                ref={_root as any}
+                {...props}
+                onDisconnect={handleOnDisconnect}
+                onConnectionFailed={handleOnConnectionFailed}
+                onConnectionStarted={handleOnConnectionStarted}
+                onConnectionSuccess={handleOnConnectionSuccess}
+                onNewBitrateReceived={handleOnNewBitrateReceived}
+                onStreamStateChanged={handleOnStreamStateChanged}
+              />
+            </Animated.View>
+          </GestureDetector>
+          {/* </PinchGestureHandler> */}
+        </View>
       </GestureHandlerRootView>
     );
   }
 );
+
+{
+  /* <GestureHandlerRootView
+        style={[styles.flex, props.style]}
+        onLayout={(event) => {
+          setViewDimension(event.nativeEvent.layout);
+        }}
+      ></GestureHandlerRootView> */
+}
 
 const styles = StyleSheet.create({
   absolute: { position: 'absolute' },
