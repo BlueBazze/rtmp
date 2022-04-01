@@ -1,6 +1,7 @@
 import React, { forwardRef, useImperativeHandle } from 'react';
 import {
   Animated,
+  Button,
   NativeModules,
   StyleSheet,
   View,
@@ -9,12 +10,13 @@ import {
 import {
   Gesture,
   GestureDetector,
+  GestureHandlerRootView,
   HandlerStateChangeEvent,
   PinchGestureHandler,
   PinchGestureHandlerEventPayload,
   State,
-  GestureHandlerRootView,
 } from 'react-native-gesture-handler';
+import { runOnJS, runOnUI, useSharedValue } from 'react-native-reanimated';
 import RTMPView, {
   ConnectionFailedType,
   ConnectionStartedType,
@@ -25,7 +27,6 @@ import RTMPView, {
   StreamStateChangedType,
 } from './Component';
 import type { RTMPPublisherRefProps, StreamState } from './types';
-import { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
 const RTMPModule = NativeModules.RTMPPublisher;
 export interface RTMPPublisherProps {
@@ -151,8 +152,8 @@ const RTMPPublisher = forwardRef<RTMPPublisherRefProps, RTMPPublisherProps>(
     const _onPinchHandlerStateChange = (
       event: HandlerStateChangeEvent<PinchGestureHandlerEventPayload>
     ) => {
-      console.log('RE');
-      console.log({ _lastScale });
+      // console.log('RE');
+      // console.log({ _lastScale });
       if (
         event.nativeEvent.oldState === State.ACTIVE &&
         event.nativeEvent.numberOfPointers === 2
@@ -172,23 +173,42 @@ const RTMPPublisher = forwardRef<RTMPPublisherRefProps, RTMPPublisherProps>(
     //   y: 0,
     // });
 
-    const scale = useSharedValue(1);
-    const savedScale = useSharedValue(1);
+    // const scale = useSharedValue(1);
+    // const savedScale = useSharedValue(1);
 
-    React.useEffect(() => {
-      console.log({ scale: scale.value, savedScale: savedScale.value });
-    }, [scale.value, savedScale.value]);
+    // function setZoom(_scale: number) {
+    //   _root.current?.setNativeProps({
+    //     zoom: `${_scale}`,
+    //   });
+    // }
 
-    const pinchGesture = Gesture.Pinch()
-      .onUpdate((e) => {
-        scale.value = savedScale.value * e.scale;
-      })
-      .onEnd(() => {
-        savedScale.value = scale.value;
-        // _root.current?.setNativeProps({
-        //   zoom: `${scale.value}`,
-        // });
-      });
+    // const pinchGesture = Gesture.Pinch()
+    //   .onUpdate((e) => {
+    //     scale.value = savedScale.value * e.scale;
+    //     console.log({
+    //       scale: scale.value,
+    //       savedScale: savedScale.value,
+    //       root: _root?.current,
+    //     });
+
+    //     runOnJS(setZoom)(scale.value)
+    //     // _root.current?.setNativeProps({
+    //     //   zoom: `${scale.value}`,
+    //     // });
+    //   })
+    //   .onEnd(() => {
+    //     console.log('pinched', scale.value, savedScale.value);
+    //     savedScale.value = scale.value;
+    //   });
+
+    // pinchGesture.config = { runOnJS: true };
+    // const tap = Gesture.Tap()
+    //   .numberOfTaps(2)
+    //   .onEnd(() => {
+    //     switchCamera();
+    //   });
+
+    // const gestures = Gesture.Exclusive(tap, pinchGesture);
 
     // const animatedStyle = useAnimatedStyle(() => ({
     //   transform: [{ scale: scale.value }],
@@ -197,16 +217,16 @@ const RTMPPublisher = forwardRef<RTMPPublisherRefProps, RTMPPublisherProps>(
     return (
       <GestureHandlerRootView style={{ flex: 1 }}>
         <View style={[styles.flex, props.style]}>
-          {/* <PinchGestureHandler
-          onGestureEvent={(event) => {
-            console.log({ event });
-            _root.current?.setNativeProps({
-              zoom: `${_lastScale * event.nativeEvent.scale}`,
-            });
-          }}
-          onHandlerStateChange={_onPinchHandlerStateChange}
-        > */}
-          <GestureDetector gesture={pinchGesture}>
+          {/* <GestureDetector gesture={gestures}> */}
+
+          <PinchGestureHandler
+            onGestureEvent={(event) => {
+              _root.current?.setNativeProps({
+                zoom: `${_lastScale * event.nativeEvent.scale}`,
+              });
+            }}
+            onHandlerStateChange={_onPinchHandlerStateChange}
+          >
             <Animated.View
               style={[styles.flex, { backgroundColor: 'red' }]}
               collapsable={false}
@@ -222,8 +242,19 @@ const RTMPPublisher = forwardRef<RTMPPublisherRefProps, RTMPPublisherProps>(
                 onStreamStateChanged={handleOnStreamStateChanged}
               />
             </Animated.View>
-          </GestureDetector>
-          {/* </PinchGestureHandler> */}
+          </PinchGestureHandler>
+
+          {/* </GestureDetector> */}
+          {/* <Button
+            title="ss"
+            onPress={() => {
+              _root.current?.setNativeProps({
+                zoom: `${scale.value}`,
+              });
+            }}
+          >
+            s
+          </Button> */}
         </View>
       </GestureHandlerRootView>
     );
