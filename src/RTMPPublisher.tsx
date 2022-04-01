@@ -1,22 +1,18 @@
 import React, { forwardRef, useImperativeHandle } from 'react';
 import {
   Animated,
-  Button,
   NativeModules,
   StyleSheet,
   View,
   ViewStyle,
 } from 'react-native';
 import {
-  Gesture,
-  GestureDetector,
   GestureHandlerRootView,
   HandlerStateChangeEvent,
   PinchGestureHandler,
   PinchGestureHandlerEventPayload,
   State,
 } from 'react-native-gesture-handler';
-import { runOnJS, runOnUI, useSharedValue } from 'react-native-reanimated';
 import RTMPView, {
   ConnectionFailedType,
   ConnectionStartedType,
