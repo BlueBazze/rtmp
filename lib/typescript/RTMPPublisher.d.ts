@@ -6,6 +6,10 @@ export interface RTMPPublisherProps {
     streamURL: string;
     streamName: string;
     /**
+     * The controls displayed absolute above the camera preview, asuming its a fullscreen preview
+     */
+    controls: React.FC;
+    /**
      * Determines if preview is displayed as landscape
      */
     IsLandscape: boolean;

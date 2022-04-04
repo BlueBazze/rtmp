@@ -29,6 +29,11 @@ export interface RTMPPublisherProps {
   style?: ViewStyle;
   streamURL: string;
   streamName: string;
+
+  /**
+   * The controls displayed absolute above the camera preview, asuming its a fullscreen preview
+   */
+  controls: React.FC;
   /**
    * Determines if preview is displayed as landscape
    */
@@ -237,6 +242,18 @@ const RTMPPublisher = forwardRef<RTMPPublisherRefProps, RTMPPublisherProps>(
                 onNewBitrateReceived={handleOnNewBitrateReceived}
                 onStreamStateChanged={handleOnStreamStateChanged}
               />
+              <Animated.View
+                style={{
+                  display: 'flex',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                }}
+              >
+                <props.controls />
+              </Animated.View>
             </Animated.View>
           </PinchGestureHandler>
 
