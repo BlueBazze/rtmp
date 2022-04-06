@@ -68,7 +68,7 @@ class RTMPCreator {
                 .width: isLandscape ? height : width,
                 .height: isLandscape ? width : height,
                 .bitrate: 8000 * 1024,
-                //.profileLevel: kVTProfileLevel_H264_Baseline_AutoLevel,
+                .profileLevel: kVTProfileLevel_H264_Baseline_AutoLevel,
                 //.profileLevel: kVTProfileLevel_H264_Baseline_AutoLevel, //kVTProfileLevel_H264_Baseline_3_1,
                 .maxKeyFrameIntervalDuration: 2,
             ]
