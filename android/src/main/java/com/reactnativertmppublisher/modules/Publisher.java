@@ -114,8 +114,13 @@ public class Publisher {
 
 
   //region COMPONENT METHODS
+
+  
   public String getPublishURL() {
     //if(_streamUrl == null || _streamName == null) return null;
+    
+    //This should be more dynamic. Only inset "/" if _streamUrl's last character isnt a "/".
+    //This could lead to having "//" in the url, which some media servers cant handle.
     return _streamUrl + "/" + _streamName;
   }
 
@@ -140,6 +145,7 @@ public class Publisher {
   }
 
   public boolean isVideoPrepared() {
+    // TODO: The prepareVideo() input should be defaults, but overrides from react native passed down.
     return _rtmpCamera.prepareVideo(1920, 1080, 10000 * 1024);
   }
 
