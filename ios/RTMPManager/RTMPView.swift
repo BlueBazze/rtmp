@@ -101,8 +101,10 @@ class RTMPView: UIView {
         RTMPCreator.stream.attachCamera(DeviceUtil.device(withPosition: AVCaptureDevice.Position.back))
 
         RTMPCreator.connection.addEventListener(.rtmpStatus, selector: #selector(statusHandler), observer: self)
+      
+      let delegate = RTMPDelegate.init()
     
-        
+      RTMPCreator.stream.delegate = delegate
       
       hkView.isUserInteractionEnabled = true
       hkView.autoresizingMask = [UIView.AutoresizingMask.flexibleHeight,

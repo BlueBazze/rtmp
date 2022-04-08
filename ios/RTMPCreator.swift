@@ -41,6 +41,8 @@ class RTMPCreator {
     
     private var currentZoomFactor: CGFloat = 1.0
     private var lastScale: CGFloat = 0.0
+    
+    
 
     
     public static func setZoom(scale: CGFloat) {
@@ -61,6 +63,8 @@ class RTMPCreator {
     isStreaming = false
   }
     
+    
+    
     public static func setVideoSettings(width: Int = 1080, height: Int = 1920, isLandscape: Bool = false) {
         
             stream.videoSettings = [
@@ -73,5 +77,7 @@ class RTMPCreator {
                 .maxKeyFrameIntervalDuration: 2,
             ]
         }
+    
+    
 
 }
