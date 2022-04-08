@@ -77,6 +77,24 @@ class RTMPCreator {
                 .maxKeyFrameIntervalDuration: 2,
                 .scalingMode: VideoCodec.defaultScalingMode
             ]
+        stream.recorderSettings = [
+            AVMediaType.audio: [
+                            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+                            AVSampleRateKey: 0,
+                            AVNumberOfChannelsKey: 0,
+                            //AVEncoderBitRateKey: 128000
+                        ],
+                        AVMediaType.video: [
+                            AVVideoCodecKey: AVVideoCodecH264,
+                            AVVideoHeightKey: 0,
+                            AVVideoWidthKey: 0,
+                            //        AVVideoCompressionPropertiesKey: [
+                            //          AVVideoMaxKeyFrameIntervalKey: 2,
+                            //          AVVideoProfileLevelKey: AVVideoProfileLevelH264Baseline30,
+                            //          AVVideoAverageBitRateKey: 512000,
+                            //        ]
+                        ]
+        ]
         }
     
     
