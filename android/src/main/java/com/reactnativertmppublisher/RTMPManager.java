@@ -98,7 +98,11 @@ public class RTMPManager extends SimpleViewManager<OpenGlView> implements Surfac
 
   @Override
   public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-    publisher.isVideoPrepared();
+    if(publisher.getRtmpCamera() != null) {
+      publisher.getRtmpCamera().stopPreview();
+      publisher.getRtmpCamera().startPreview();
+      publisher.isVideoPrepared();
+    }
   }
 
   @Override
