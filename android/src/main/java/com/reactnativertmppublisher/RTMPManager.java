@@ -1,5 +1,6 @@
 package com.reactnativertmppublisher;
 
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
@@ -17,7 +18,7 @@ import com.reactnativertmppublisher.modules.SurfaceHolderHelper;
 
 import java.util.Map;
 
-public class RTMPManager extends SimpleViewManager<OpenGlView> {
+public class RTMPManager extends SimpleViewManager<OpenGlView> implements SurfaceHolder.Callback {
   //TODO: "Do not place Android context classes in static fields (static reference to Publisher which has field _surfaceView pointing to SurfaceView); this is a memory leak"
   public static Publisher publisher;
   public final String REACT_CLASS_NAME = "RTMPPublisher";
@@ -48,6 +49,7 @@ public class RTMPManager extends SimpleViewManager<OpenGlView> {
     publisher = new Publisher(_reactContext, openGlView);
     //surfaceView.addOnLayoutChangeListener(onLayoutChangeListener);
     openGlView.addOnLayoutChangeListener(onLayoutChangeListener);
+    openGlView.getHolder().addCallback(this);
 
     //SurfaceHolderHelper surfaceHolderHelper = new SurfaceHolderHelper(_reactContext, publisher.getRtmpCamera(), surfaceView.getId());
     //surfaceView.getHolder().addCallback(surfaceHolderHelper);
@@ -87,5 +89,20 @@ public class RTMPManager extends SimpleViewManager<OpenGlView> {
       .put("onNewBitrateReceived", MapBuilder.of("registrationName", "onNewBitrateReceived"))
       .put("onStreamStateChanged", MapBuilder.of("registrationName", "onStreamStateChanged"))
       .build();
+  }
+
+  @Override
+  public void surfaceCreated(SurfaceHolder surfaceHolder) {
+    publisher.isVideoPrepared();
+  }
+
+  @Override
+  public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+    publisher.isVideoPrepared();
+  }
+
+  @Override
+  public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+
   }
 }
