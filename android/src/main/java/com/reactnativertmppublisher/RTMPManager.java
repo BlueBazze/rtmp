@@ -101,7 +101,6 @@ public class RTMPManager extends SimpleViewManager<OpenGlView> implements Surfac
     if(publisher.getRtmpCamera() != null) {
       publisher.getRtmpCamera().stopPreview();
       publisher.getRtmpCamera().startPreview();
-      publisher.isVideoPrepared();
     }
   }
 
