@@ -146,7 +146,7 @@ public class Publisher {
 
   public boolean isVideoPrepared() {
     // TODO: The prepareVideo() input should be defaults, but overrides from react native passed down.
-    return _rtmpCamera.prepareVideo(1920, 1080, 10000 * 1024);
+    return _rtmpCamera.prepareVideo(1920, 1080, 5000 * 1024);
   }
 
   public boolean hasCongestion() {
